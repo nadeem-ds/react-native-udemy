@@ -1,45 +1,51 @@
-import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  FlatList,
-} from "react-native";
+import { StyleSheet, Text, View, FlatList, Button } from "react-native";
+import GoalInput from "./src/components/GoalInput";
+import GoalItem from "./src/components/GoalItem";
 
 export default function App() {
-  const [goal, setGoal] = useState("");
+  const [modalIsVisible, setModalIsVisible] = useState(false);
   const [courseGoal, setCourseGoal] = useState([]);
-  const goalInputHandler = (text) => {
-    setGoal(text);
-  };
-  const goalHandleSubmit = () => {
+
+  const goalHandleSubmit = (goal) => {
     setCourseGoal((currentCourseGoal) => [
       ...currentCourseGoal,
-      { text: goal, key: Math.random().toString() },
+      { text: goal, id: Math.random().toString() },
     ]);
-    setGoal("");
+    endAddGoalHandler();
+  };
+
+  const deleteGoalHandler = (id) => {
+    setCourseGoal((currentCourseGoal) => {
+      return currentCourseGoal.filter((goal) => goal.id != id);
+    });
+  };
+  const startAddGoalHandler = () => {
+    setModalIsVisible(!modalIsVisible);
+  };
+  const endAddGoalHandler = () => {
+    setModalIsVisible(false);
   };
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Your Course Goal"
-          style={styles.textInput}
-          value={goal}
-          onChangeText={goalInputHandler}
-        />
-        <Button title="Add Goal" onPress={goalHandleSubmit} />
-      </View>
+      <Button title="Add new Goal" onPress={startAddGoalHandler} />
+      <GoalInput
+        onAddGoal={goalHandleSubmit}
+        showModal={modalIsVisible}
+        endAddGoalHandler={endAddGoalHandler}
+      />
       <View style={styles.goalsContainer}>
         <Text style={styles.goalheading}>Your Goal</Text>
         <FlatList
           data={courseGoal}
           renderItem={(itemData) => {
-            return <Text style={styles.listStyle}>{itemData.item.text}</Text>;
+            return (
+              <GoalItem
+                textData={itemData.item.text}
+                onDeleteItem={deleteGoalHandler}
+                id={itemData.item.id}
+              />
+            );
           }}
           keyExtractor={(item, index) => {
             return item.id;
@@ -55,37 +61,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
     paddingHorizontal: 15,
+    backgroundColor: "#FAFAD2",
   },
-  inputContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
-  },
-  textInput: {
-    borderWidth: 2,
-    borderColor: "#cccccc",
-    width: "65%",
-    borderRadius: 8,
-    padding: 8,
-  },
+
   goalsContainer: {
     flex: 5,
   },
-  listStyle: {
-    backgroundColor: "#231651",
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: "white",
-    padding: 10,
-    paddingHorizontal: 20,
-    color: "white",
-    fontWeight: "bold",
-    margin: 5,
-  },
+
   goalheading: {
     textAlign: "center",
     fontSize: 20,
