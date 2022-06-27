@@ -27,6 +27,7 @@ const GoalInput = ({ onAddGoal, showModal, endAddGoalHandler }) => {
     <Modal visible={showModal} animationType="slide">
       <View style={styles.inputContainer}>
         <Image style={styles.image} source={require("../../assets/goal.png")} />
+        {/* <Image style={styles.image} source="/images/assets/goal.png" /> */}
         <TextInput
           placeholder="Your Course Goal"
           style={styles.textInput}
