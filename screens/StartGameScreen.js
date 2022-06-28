@@ -5,7 +5,6 @@ import PrimaryButton from "../components/PrimaryButton";
 const StartGameScreen = () => {
   return (
     <View style={styles.inputContainer}>
-      <Text>Start the guess app </Text>
       <TextInput
         style={styles.textInput}
         maxLength={2}
@@ -13,8 +12,14 @@ const StartGameScreen = () => {
         autoCapitalize="none"
         autoCorrect={false}
       />
-      <PrimaryButton children="Reset" />
-      <PrimaryButton children="Confirm" />
+      <View style={styles.buttonsContainer}>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton children="Reset" />
+        </View>
+        <View style={styles.buttonContainer}>
+          <PrimaryButton children="Confirm" />
+        </View>
+      </View>
     </View>
   );
 };
@@ -23,11 +28,13 @@ export default StartGameScreen;
 
 const styles = StyleSheet.create({
   inputContainer: {
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 100,
     marginHorizontal: 25,
     borderRadius: 16,
     padding: 16,
-    backgroundColor: "#72063c",
+    backgroundColor: "#4e0329",
     elevation: 20,
   },
   textInput: {
@@ -40,5 +47,12 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+  },
+  buttonContainer: {
+    flex: 1,
+    marginHorizontal: 5,
   },
 });
